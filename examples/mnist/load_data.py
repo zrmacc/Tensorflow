@@ -4,7 +4,7 @@ import numpy as np
 import sys
 import tensorflow as tf
 
-sys.path.append("../..")
+sys.path.append("..")
 import utils
 
 # ----------------------------------------------------------------------------

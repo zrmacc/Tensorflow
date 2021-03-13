@@ -5,17 +5,16 @@ import subprocess as sp
 import tempfile
 import tensorflow as tf
 
-import models
-import load_data
-import mnist_utils
-
-import custom_callbacks
-
 # Set local directory?
 set_dir = False
 if set_dir:
     import os
-    os.setdir('/Users/zmccaw/Documents/Tensorflow/examples/mnist')
+    os.chdir('/Users/zmccaw/Documents/Tensorflow/examples/mnist')
+
+import custom_callbacks
+import models
+import load_data
+import mnist_utils
 
 # ----------------------------------------------------------------------------
 # Tensorboard
