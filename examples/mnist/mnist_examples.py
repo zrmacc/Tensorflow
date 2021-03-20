@@ -2,6 +2,7 @@
 
 import pandas as pd
 import subprocess as sp
+import sys
 import tempfile
 import tensorflow as tf
 
@@ -11,10 +12,14 @@ if set_dir:
     import os
     os.chdir('/Users/zmccaw/Documents/Tensorflow/examples/mnist')
 
-import custom_callbacks
-import models
+import configs
 import load_data
+import models
 import mnist_utils
+
+sys.path.append("..")
+import utils.custom_callbacks as custom_callbacks
+
 
 # ----------------------------------------------------------------------------
 # Tensorboard
@@ -36,7 +41,8 @@ else:
     callbacks = []
 
 # Model.
-model = models.mnist_conv_model()
+config = configs.conv_model_config()
+model = models.mnist_conv_model(config)
 model.summary()
 history = model.fit(
     x=data['x_train'],
@@ -68,14 +74,43 @@ test_loss, test_acc = model.evaluate(
 # Prediction.
 mnist_utils.plot_random_prediction(x=data['x_test'], model=model)
 
+# ----------------------------------------------------------------------------
+# CSV writer.
+# ----------------------------------------------------------------------------
+
+# Model.
+config = configs.conv_model_config()
+model = models.mnist_conv_model(config)
+model.summary()
+
+# Callbacks.
+callbacks = [
+    tf.keras.callbacks.CSVLogger(
+        filename="results/conv_model_callbacks.tsv",
+        separator="\t")    
+]
+
+# Training.
+history = model.fit(
+    x=data['x_train'],
+    y=data['y_train'],
+    batch_size=256,
+    epochs=10,
+    validation_data=(data['x_val'], data['y_val']),
+    callbacks=callbacks,
+    verbose=2)
+
+# Load saved data.
+train_output = pd.read_csv("results/conv_model_callbacks.tsv", sep="\t")
+train_output.head()
 
 # ----------------------------------------------------------------------------
 # Early stopping.
 # ----------------------------------------------------------------------------
 
-
 # Model.
-model = models.mnist_dens_model()
+config = configs.dens_model_config()
+model = models.mnist_dens_model(config)
 model.summary()
 
 # Early stopping callback.
@@ -104,13 +139,13 @@ test_loss, test_acc = model.evaluate(
 # Prediction.
 mnist_utils.plot_random_prediction(x=data['x_test'], model=model)
 
-
 # ----------------------------------------------------------------------------
 # Custom callbacks.
 # ----------------------------------------------------------------------------
 
 # Model.
-model = models.mnist_dens_model()
+config = configs.dens_model_config()
+model = models.mnist_dens_model(config)
 model.summary()
 
 # Reporting callbacks.
@@ -149,3 +184,9 @@ history = model.fit(
     validation_data=(data['x_val'], data['y_val']),
     callbacks=callbacks,
     verbose=0)
+
+# Evaluation.
+test_loss, test_acc = model.evaluate(
+    x=data['x_test'],
+    y=data['y_test'],
+    verbose=2)

@@ -5,7 +5,7 @@ import sys
 import tensorflow as tf
 
 sys.path.append("..")
-import utils
+import utils.data_utils as utils
 
 # ----------------------------------------------------------------------------
 

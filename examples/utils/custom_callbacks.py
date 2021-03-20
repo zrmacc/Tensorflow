@@ -64,3 +64,4 @@ class CustomLearningRateScheduler(tf.keras.callbacks.Callback):
         # Set the value back to the optimizer before this epoch starts
         tf.keras.backend.set_value(self.model.optimizer.lr, scheduled_lr)
         print("\nEpoch {}: Learning rate is {:.5f}".format(epoch, scheduled_lr))
+
