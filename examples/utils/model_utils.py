@@ -6,28 +6,48 @@ import tensorflow as tf
 # ----------------------------------------------------------------------------
 
 
-def get_outputs(inputs: tf.Tensor, outcomes: List[ml_collections.ConfigDict]) -> List[tf.Tensor]:
+def get_inputs(inputs: List[ml_collections.ConfigDict]) -> List[tf.Tensor]:
+    """Generate model inputs.
+    
+    Args:
+        inputs: List of ConfigDicts specifying the model inputs.
+    
+    Returns:
+        model_inputs: Dictionary of tf.Tensors, keyed by input name.
+    
+    """
+    model_inputs = {}
+    for entry in inputs: 
+        model_inputs[entry.name] = tf.keras.layers.Input(
+            shape=entry.input_shape)
+    return model_inputs
+
+
+# ----------------------------------------------------------------------------
+
+
+def get_outputs(inputs: tf.Tensor, 
+                outcomes: List[ml_collections.ConfigDict]) -> List[tf.Tensor]:
     """Generate outputs.
 
     Args:
         outcomes: List of ConfigDicts specifying the model outcomes.
 
     Returns:
-        outputs: List of tf.Tensors.
+        outputs: Dictionary of tf.Tensors, keyed by outcome name.
 
     """
-    outputs = []
+    outputs = {}
     for out in outcomes: 
         if out.type == 'binary':
-            emit = tf.keras.layers.Dense(
+            outputs[out.name] = tf.keras.layers.Dense(
                 1, activation='sigmoid', name=out.name)(inputs)
         elif out.type == 'continuous':
-            emit = tf.keras.layers.Dense(
+            outputs[out.name] = tf.keras.layers.Dense(
                 1, activation='linear', name=out.name)(inputs)
         elif out.type == 'categorical':
-            emit = tf.keras.layers.Dense(
+            outputs[out.name] = tf.keras.layers.Dense(
                 out.levels, activation='softmax', name=out.name)(inputs)
-        outputs.append(emit)
 
     return outputs
 

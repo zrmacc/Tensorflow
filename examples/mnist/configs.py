@@ -10,16 +10,23 @@ def conv_model_config() -> ml_collections.ConfigDict:
 
 	config = ml_collections.ConfigDict()
 
-	config.inputs = ml_collections.ConfigDict({
-		'input_shape': (28, 28, 1)
-	})
+    # List of ConfigDicts. 1 for each input.
+	config.inputs = [
+        ml_collections.ConfigDict({
+            'name': 'Image',
+            'input_shape': (28, 28, 1)
+        })
+    ]
+
 
 	# List of ConfigDicts. 1 for each output.
-	config.outputs = [ml_collections.ConfigDict({
-		'name': 'number',
-		'type': 'categorical',
-		'levels': 10
-	})]
+	config.outputs = [
+        ml_collections.ConfigDict({
+            'name': 'Number',
+            'type': 'categorical',
+            'levels': 10
+        })
+    ]
 
 	# Hyperparameters.
 	config.hparams = ml_collections.ConfigDict({
@@ -41,16 +48,22 @@ def dens_model_config() -> ml_collections.ConfigDict:
 
 	config = ml_collections.ConfigDict()
 
-	config.inputs = ml_collections.ConfigDict({
-		'input_shape': (28, 28, 1)
-	})
+    # List of ConfigDicts. 1 for each input.
+	config.inputs = [
+        ml_collections.ConfigDict({
+            'name': 'Image',
+            'input_shape': (28, 28, 1)
+        })
+    ]
 
 	# List of ConfigDicts. 1 for each output.
-	config.outputs = [ml_collections.ConfigDict({
-		'name': 'number',
-		'type': 'categorical',
-		'levels': 10
-	})]
+	config.outputs = [
+        ml_collections.ConfigDict({
+            'name': 'Number',
+            'type': 'categorical',
+            'levels': 10
+        })
+    ]
 
 	# Hyperparameters.
 	config.hparams = ml_collections.ConfigDict({

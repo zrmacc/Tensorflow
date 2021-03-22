@@ -10,7 +10,8 @@ def plot_random_prediction(x, model: tf.keras.Model) -> None:
     """Plot random image with predicted label."""
     n = x.shape[0]
     idx = np.random.choice(n)
-    probs = model.predict(np.expand_dims(x[idx,:], axis=0))[0,:]
+    probs = model.predict(np.expand_dims(x[idx,:], axis=0))['Number']
+    probs = probs[0, :]
     yhat = np.argmax(probs)
     yprob = probs[yhat]
     
